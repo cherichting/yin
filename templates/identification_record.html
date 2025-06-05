@@ -1,0 +1,185 @@
+{% extends 'top_base.html' %}
+{% block content %}
+    <style>
+        /* 表格容器样式 */
+        .table-container {
+            width: 100%;
+            max-height: 800px;
+            overflow-x: auto;
+            text-align: center;
+        }
+
+        /* 表格样式 */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            table-layout: fixed;
+        }
+
+        /* 表格表头和单元格样式 */
+        th, td {
+            padding: 15px;
+            border: 1px solid #ddd;
+        }
+
+        /* 表头背景颜色 */
+        th {
+            background-color: #f2f2f2;
+        }
+
+        /* 表格偶数行背景颜色 */
+        tbody tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        /* 表格行悬停效果 */
+        tbody tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        /* 分页导航样式 */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        /* 分页链接和页码样式 */
+        .pagination a,
+        .pagination span {
+            padding: 6px 12px;
+            background-color: #f2f2f2;
+            color: #333;
+            text-decoration: none;
+            margin-right: 4px;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+
+        /* 分页链接悬停效果 */
+        .pagination a:hover {
+            background-color: #e0e0e0;
+        }
+
+        /* 当前页码样式 */
+        .current-page {
+            background-color: #cfd8dc;
+        }
+
+        /* 预警框样式 */
+        .warning-box {
+            background: #fff8db;
+            border: 2px solid #ffd700;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        /* 预警框标题样式 */
+        .warning-box h3 {
+            color: #856404;
+            margin-top: 0;
+            font-size: 1.2em;
+        }
+
+        /* 预警项样式 */
+        .warning-item {
+            margin: 15px 0;
+        }
+
+        /* 预警项中病害名称样式 */
+        .warning-item p span {
+            color: #d8000c;
+        }
+
+        /* 防治措施容器样式 */
+        .warning-item div:nth-child(2) {
+            background: white;
+            padding: 10px;
+            border-radius: 4px;
+        }
+
+        /* 防治措施标题样式 */
+        .warning-item div:nth-child(2) p {
+            margin: 5px 0;
+            color: #333;
+        }
+
+        /* 防治措施内容样式 */
+        .warning-item div:nth-child(2) div {
+            color: #666;
+        }
+
+        /* 无数据提示样式 */
+        .no-data {
+            text-align: center;
+            padding: 50px;
+            color: #888;
+        }
+    </style>
+
+    <!-- 新增预警信息展示 -->
+    {% if warnings %}
+        <div class="warning-box">
+            <h3>⚠️ 病害预警</h3>
+            {% for warn in warnings %}
+                <div class="warning-item">
+                    <p>检测到 <span>{{ warn.disease }}</span> 已累计识别 {{ warn.count }} 次！</p>
+                    <div>
+                        <p>📌 防治措施：</p>
+                        <div>{{ warn.measure|safe }}</div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <div class="table-container">
+        {% if datalist %}
+            <table>
+                <thead>
+                    <tr>
+                        <th>id</th>
+                        <th>用户id</th>
+                        <th>识别时间</th>
+                        <th>识别图片</th>
+                        <th>识别结果</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for row in datalist %}
+                        <tr>
+                            <td>{{ row[0] }}</td>
+                            <td>{{ row[1] }}</td>
+                            <td>{{ row[2] }}</td>
+                            <td><img src="{{ row[3] }}" alt="" width="100" height="100"></td>
+                            <td>{{ row[4] }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <div class="no-data">暂无识别记录数据。</div>
+        {% endif %}
+    </div>
+
+    <!-- 分页导航 -->
+    <div class="pagination">
+        {% if current_page > 1 %}
+            <a href="{{ url_for('identification_record', page=current_page - 1) }}">上一页</a>
+        {% endif %}
+
+        {% for page_number in range(1, total_pages + 1) %}
+            {% if page_number == current_page %}
+                <span class="current-page">{{ page_number }}</span>
+            {% else %}
+                <a href="{{ url_for('identification_record', page=page_number) }}">{{ page_number }}</a>
+            {% endif %}
+        {% endfor %}
+
+        {% if current_page < total_pages %}
+            <a href="{{ url_for('identification_record', page=current_page + 1) }}">下一页</a>
+        {% endif %}
+    </div>
+{% endblock %}

@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
+    <title>后台登录</title>
+
+    <!-- Favicon -->
+    <link rel="shortcut icon" type="image/x-icon" href="static/admin/assets/img/favicon.png">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css">
+
+
+    <!-- Fontawesome CSS -->
+    <link rel="stylesheet" href="static/admin/assets/css/font-awesome.min.css">
+
+    <!-- Main CSS -->
+    <link rel="stylesheet" href="static/admin/assets/css/style.css">
+
+    <!--[if lt IE 9]>
+    <script src="static/admin/assets/js/html5shiv.min.js"></script>
+    <script src="static/admin/assets/js/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body>
+
+<!-- Main Wrapper -->
+<div class="main-wrapper login-body">
+    <div class="login-wrapper">
+        <div class="container">
+            <div class="loginbox">
+                <div class="login-left">
+                    {#                    <img class="img-fluid" src="static/admin/assets/img/logo-white.png" alt="Logo">#}
+                </div>
+                <div class="login-right">
+                    <div class="login-right-wrap">
+                        <h1>管理员登录</h1>
+                        <p class="account-subtitle"></p>
+
+                        <!-- Form -->
+                        <form>
+                            <div class="form-group">
+                                <input class="form-control" name="username" type="text" placeholder="请输入用户名">
+                            </div>
+                            <div class="form-group">
+                                <input class="form-control" name="password" type="password" placeholder="请输入密码">
+                            </div>
+                            <div class="form-group">
+                                <button class="btn btn-primary btn-block" type="submit">登录</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /Main Wrapper -->
+
+<!-- jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<!-- Bootstrap Core JS -->
+<script src="static/admin/assets/js/popper.min.js"></script>
+<script src="static/admin/assets/js/bootstrap.min.js"></script>
+<!-- Custom JS -->
+<script src="static/admin/assets/js/script.js"></script>
+<script>
+    $(document).ready(function () {
+        $('form').on('submit', function (event) {
+            event.preventDefault();
+
+            var formData = $(this).serialize(); // 获取表单数据
+
+            $.ajax({
+                url: '/admin',
+                method: 'POST',
+                data: formData, // 直接传递序列化后的表单数据
+                success: function (response) {
+                    // 请求成功处理逻辑
+                    if (response.state === 'success') {
+                        // 登录成功的处理逻辑
+                        alert(response.message)
+                        window.location.href = '/admin_analysis';
+                    } else if (response.state === 'error') {
+                        // 登录失败的处理逻辑
+                        alert(response.message)
+                        window.location.href = '/admin'
+
+                    }
+                }
+            });
+        });
+    });
+</script>
+
+</body>
+</html>

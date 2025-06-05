@@ -1,0 +1,94 @@
+{% extends 'top_base.html' %}
+{% block content %}
+    <style>
+        .font {
+            color: black;
+        }
+
+        .knowledge-container {
+            width: 800px;
+            height: 800px;
+            margin: 0 auto;
+        }
+
+        .knowledge-item {
+            margin-bottom: 20px;
+            padding: 10px;
+            background-color: #f4f4f4;
+            border-radius: 4px;
+        }
+
+        h2 {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        p {
+            font-size: 16px;
+            margin-bottom: 5px;
+        }
+
+        .date {
+            color: gray;
+        }
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .pagination a,
+        .pagination .current-page {
+            display: inline-block;
+            padding: 8px 12px;
+            margin: 0 5px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            text-decoration: none;
+            color: #333;
+        }
+
+        .pagination .current-page {
+            font-weight: bold;
+            background-color: #ccc;
+            color: #fff;
+        }
+
+        .pagination a:hover {
+            background-color: #f4f4f4;
+        }
+    </style>
+
+    <div class="knowledge-container">
+        {% for knowledge in knowledge_list_paginated %}
+            <a href="/detail?id={{ knowledge[0] }}" class="font">
+                <div class="knowledge-item">
+                    <h2>{{ knowledge[1] }}</h2>
+                    <p>{{ knowledge[2] }}</p>
+                    <p class="date">{{ knowledge[3] }}</p>
+                </div>
+            </a>
+        {% endfor %}
+    </div>
+
+    <div class="pagination">
+        {% if page > 1 %}
+            <a href="?page={{ page-1 }}">上一页</a>
+        {% endif %}
+
+        {% for p in range(1, total_pages+1) %}
+            {% if p == page %}
+                <span class="current-page">{{ p }}</span>
+            {% else %}
+                <a href="?page={{ p }}">{{ p }}</a>
+            {% endif %}
+        {% endfor %}
+
+        {% if page < total_pages %}
+            <a href="?page={{ page+1 }}">下一页</a>
+        {% endif %}
+    </div>
+
+{% endblock %}

@@ -1,0 +1,264 @@
+{% extends 'top_base.html' %}
+{% block content %}
+    <!-- FAVICON -->
+    <link rel="shortcut icon" href="static/admin/assets1/js/favicon.png">
+    <!-- STYLESHEETS -->
+    <!-- 引入 ECharts -->
+    <script src="https://unpkg.com/echarts/dist/echarts.min.js"></script>
+
+    <div class="ui container" style="margin-top: 100px;">
+        <!-- 新增预警信息展示 -->
+        {% if warnings %}
+            <div class="ui yellow message">
+                <h3 class="ui header">⚠️ 虫害预警</h3>
+                {% for warn in warnings %}
+                    <div class="ui segment">
+                        <p>检测到 <span class="ui red text">{{ warn.disease }}</span> 已累计识别 {{ warn.count }} 次！</p>
+                        <div class="ui segment">
+                            <p class="ui header">📌 防治措施：</p>
+                            <div>{{ warn.measure|safe }}</div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        <!-- 统计信息区域 -->
+        <div class="ui five column grid">
+            <div class="column">
+                <div class="ui blue statistic">
+                    <div class="value">{{ user_num }}</div>
+                    <div class="label">用户数量</div>
+                </div>
+            </div>
+            <div class="column">
+                <div class="ui green statistic">
+                    <div class="value">{{ drug_num }}</div>
+                    <div class="label">水稻病虫害数量</div>
+                </div>
+            </div>
+            <div class="column">
+                <div class="ui teal statistic">
+                    <div class="value">{{ category_num }}</div>
+                    <div class="label">种类数量</div>
+                </div>
+            </div>
+            <div class="column">
+                <div class="ui purple statistic">
+                    <div class="value">{{ knowledge_num }}</div>
+                    <div class="label">知识科普</div>
+                </div>
+            </div>
+            <div class="column">
+                <div class="ui orange statistic">
+                    <div class="value">{{ recognition_num }}</div>
+                    <div class="label">识别次数</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 图表区域 -->
+        <div class="ui two column grid">
+            <div class="column">
+                <div class="ui segment">
+                    <div id="echart1" style="width: 100%;height: 700px;"></div>
+                </div>
+            </div>
+            <div class="column">
+                <div class="ui segment">
+                    <div id="echart2" style="width: 100%;height: 700px;"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 响应式表格区域 -->
+        <div class="ui segment">
+            <div id="echart3" style="width: 100%;height: 500px;"></div>
+        </div>
+    </div>
+
+    <!-- 图表初始化脚本 -->
+    <script>
+        var chartDom = document.getElementById('echart1');
+        var myChart = echarts.init(chartDom);
+        var option;
+
+        option = {
+            title: {
+                text: '每种水稻病虫害的识别次数',
+                left: 'center',
+                top: 20,
+                textStyle: {
+                    color: '#333',
+                    fontSize: 18
+                }
+            },
+            tooltip: {
+                trigger: 'item'
+            },
+            legend: {
+                orient: 'horizontal',
+                top: '10%',
+                left: 'center'
+            },
+            series: [
+                {
+                    name: '水稻病虫害',
+                    type: 'pie',
+                    radius: ['60%', '80%'],
+                    avoidLabelOverlap: false,
+                    label: {
+                        show: false,
+                        position: 'center'
+                    },
+                    emphasis: {
+                        label: {
+                            show: true,
+                            fontSize: 20,
+                            fontWeight: 'bold'
+                        }
+                    },
+                    labelLine: {
+                        show: false
+                    },
+                    data: {{ pie_data|tojson }}
+                }
+            ]
+        };
+
+        option && myChart.setOption(option);
+    </script>
+    <script>
+        var chartDom = document.getElementById('echart2');
+        var myChart = echarts.init(chartDom);
+        var option;
+
+        option = {
+            title: {
+                text: '每个用户识别次数',
+                left: 'center',
+                top: 20,
+                textStyle: {
+                    color: '#333',
+                    fontSize: 18
+                }
+            },
+            tooltip: {
+                trigger: 'item',
+                formatter: '{a} <br/>{b}: {c} ({d}%)'
+            },
+            color: ['#FFAE57', '#FF7853', '#EA5151', '#CC3F57', '#9A2555', '#7D3EB7'],
+            legend: {
+                top: 'bottom'
+            },
+            toolbox: {
+                show: true,
+                feature: {
+                    mark: { show: true },
+                    dataView: { show: true, readOnly: false },
+                    restore: { show: true },
+                    saveAsImage: { show: true }
+                }
+            },
+            series: [
+                {
+                    name: 'Nightingale Chart',
+                    type: 'pie',
+                    radius: [50, 250],
+                    center: ['50%', '50%'],
+                    roseType: 'area',
+                    itemStyle: {
+                        borderRadius: 8
+                    },
+                    data: {{ user_count_data|tojson }},
+                    animationType: 'scale',
+                    animationEasing: 'elasticOut',
+                    animationDelay: function (idx) {
+                        return Math.random() * 200;
+                    }
+                }
+            ]
+        };
+
+        option && myChart.setOption(option);
+    </script>
+    <script>
+        var chartDom = document.getElementById('echart3');
+        var myChart = echarts.init(chartDom);
+        var option;
+
+        option = {
+            title: {
+                text: '每日识别数量趋势',
+                left: 'center',
+                top: 20,
+                textStyle: {
+                    color: '#333',
+                    fontSize: 18
+                }
+            },
+            xAxis: {
+                type: 'category',
+                data: {{ dates | tojson }},
+                axisLabel: {
+                    rotate: 45,
+                    textStyle: {
+                        color: '#333'
+                    }
+                }
+            },
+            yAxis: {
+                type: 'value',
+                axisLabel: {
+                    textStyle: {
+                        color: '#333'
+                    }
+                },
+                splitLine: {
+                    show: false
+                }
+            },
+            series: [
+                {
+                    data: {{ counts }},
+                    type: 'line',
+                    smooth: true,
+                    symbol: 'circle',
+                    symbolSize: 8,
+                    lineStyle: {
+                        color: '#61a0a8'
+                    },
+                    itemStyle: {
+                        color: '#61a0a8'
+                    }
+                }
+            ],
+            grid: {
+                containLabel: true,
+                left: 20,
+                right: 20,
+                top: 40,
+                bottom: 40
+            },
+            tooltip: {
+                trigger: 'axis',
+                axisPointer: {
+                    type: 'line'
+                }
+            }
+        };
+
+        option && myChart.setOption(option);
+    </script>
+
+    <!-- SmartBox Js files -->
+    <script>
+        var resizefunc = [];
+    </script>
+
+    <script src="static/admin/assets1/js/jquery.min.js"></script>
+    {#<script src="static/admin/assets1/js/bootstrap.min.js"></script>#}
+    <script src="static/admin/assets1/plugins/morris/morris.min.js"></script>
+    <script src="static/admin/assets1/plugins/raphael/raphael-min.js"></script>
+    <script src="static/admin/assets1/js/cb-chart.js"></script>
+{% endblock %}

@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>系统登录</title>
+    <link rel="stylesheet" href="static/assets/css/style.css">
+
+</head>
+<body>
+<!-- partial:index.partial.html -->
+<section>
+    <div class="container">
+        <div class="form sign-in-form">
+            <div class="wrapper">
+                <form id="loginForm">
+                    <h1>登录</h1>
+                    <p>使用你的账号进行登录</p>
+                    <input type="text" name="username" placeholder="用户名">
+                    <input type="password" name="password" placeholder="密码">
+                    <button type="submit">登录</button>
+                </form>
+            </div>
+        </div>
+        <div class="form sign-up-form active">
+            <div class="wrapper">
+                <form id="registerForm">
+                    <h1>注册</h1>
+                    <p>请提供所有正确的信息来创建一个帐户</p>
+                    <input type="text" name="username" placeholder="用户名">
+                    <input type="password" name="password" placeholder="密码">
+                    <button type="submit">注册</button>
+                </form>
+            </div>
+        </div>
+        <div class="overlay-container">
+            <div class="overlay">
+                <div class="overlay-left">
+                    <h1>创建账户</h1>
+                    <p>或</p>
+                    <button id="signInButton">登录</button>
+                </div>
+                <div class="overlay-right">
+                    <h1>请登录</h1>
+                    <p>或</p>
+                    <button id="signUpButton">创建账户</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<div id="webCifar-sidebox">
+
+</div>
+<!-- partial -->
+<script src="static/assets/js/script.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        // 监听登录表单的提交事件
+        $('#loginForm').submit(function (event) {
+            event.preventDefault(); // 阻止表单的默认提交行为
+
+            // 创建 FormData 对象
+            var formData = new FormData(this);
+
+            // 发起 AJAX 请求
+            $.ajax({
+                url: '/', // Flask 后台的路由地址
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (response) {
+                    // 请求成功处理逻辑
+                    if (response.state === 'success') {
+                        // 登录成功的处理逻辑
+                        alert(response.message)
+                        window.location.href = '/index';
+                    } else if (response.state === 'error') {
+                        // 登录失败的处理逻辑
+                        alert(response.message)
+                        window.location.href = '/'
+
+                    }
+                }
+            });
+        });
+    });
+</script>
+<script>
+    $(document).ready(function () {
+        // 监听注册表单的提交事件
+        $('#registerForm').submit(function (event) {
+            event.preventDefault(); // 阻止表单的默认提交行为
+
+            // 创建 FormData 对象
+            var formData = new FormData(this);
+
+            // 发起 AJAX 请求
+            $.ajax({
+                url: '/register', // Flask 后台的路由地址
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (response) {
+                    // 请求成功处理逻辑
+                    if (response.state === 'success') {
+                        alert(response.message)
+                        window.location.href = '/';
+                    } else if (response.state === 'error') {
+                        alert(response.message)
+                    }
+                },
+                error: function (xhr, status, error) {
+                    // 处理错误响应
+                    console.error(error);
+                    // 根据错误进行相应操作
+                }
+            });
+        });
+    });
+</script>
+</body>
+</html>

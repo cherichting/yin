@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>首页</title>
+    <link rel="stylesheet" type="text/css" href="static/foreground/css/semantic.min.css">
+    <link rel="stylesheet" href="static/foreground/css/index.css">
+    <meta name="referrer" content="no-referrer" />
+    <style>
+        /* 设置导航栏容器为弹性布局 */
+        .ui.inverted.secondary.stackable.menu {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        /* 媒体查询：小屏幕样式 */
+        @media only screen and (max-width: 767px) {
+            .m-mobile-hide {
+                display: none;
+            }
+            /* 显示菜单按钮 */
+            .m-mobile-show {
+                display: block !important;
+            }
+        }
+
+        /* 去除标题元素的默认外边距 */
+        .ui.teal.header.item {
+            margin-left: 0;
+            padding-left: 0;
+        }
+    </style>
+</head>
+<body>
+
+<!--导航-->
+<nav class="ui inverted segment m-padded-tb-mini">
+    <div class="ui container">
+        <div class="ui inverted secondary stackable menu">
+            <h2 class="ui teal header item">基于深度学习的水稻虫害预警系统</h2>
+            <a href="/index" class="active m-item item m-mobile-hide"><i class="home"></i>首页</a>
+            <a href="/image_recognition" class="m-item item m-mobile-hide"><i class="idea"></i>图像识别</a>
+            <a href="/knowledge" class="m-item item m-mobile-hide"><i class="tags"></i>水稻病虫害资讯</a>
+            <a href="/category_list" class="m-item item m-mobile-hide"><i class="tags"></i>水稻病虫害信息</a>
+            <a href="/sort" class="m-item item m-mobile-hide"><i class="tags "></i>水稻病虫害分类</a>
+            <a href="/identification_record" class="m-item item m-mobile-hide"><i class="tags "></i>识别记录</a>
+            <a href="/prevention" class="m-item item m-mobile-hide"><i class="tags "></i>预警信息展示</a>
+            <div class="right m-item item m-mobile-hide">
+                <form class="ui inverted transparent input" action="/search" method="get"
+                      onsubmit="return validateForm()">
+                    <input type="text" name="keyword" id="searchInput" placeholder="请输入">
+                    <button type="submit" class="" style="background-color: black">搜索</button>
+                </form>
+            </div>
+            <a href="/" class="m-item item m-mobile-hide"><i class="tags "></i>退出登录</a>
+        </div>
+    </div>
+
+    <a href="#" class="ui menu toggle black icon button m-right-top m-mobile-show" style="display: none;">
+        <i class="sidebar icon"></i>
+    </a>
+
+</nav>
+{% block content %}
+
+{% endblock %}
+<!--底部-->
+
+</footer>
+<script>
+    function validateForm() {
+        var searchValue = document.getElementById("searchInput").value;
+        if (searchValue.trim() === "") {
+            alert("请输入搜索关键词");
+            return false; // 阻止提交表单
+        }
+        return true; // 允许提交表单
+    }
+</script>
+</html>

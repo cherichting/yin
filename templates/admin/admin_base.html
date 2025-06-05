@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
+    <title>基于深度学习的水稻虫害预警系统-后台管理</title>
+
+    <!-- Load static files -->
+    <link rel="shortcut icon" type="image/x-icon" href="{{ url_for('static', filename='admin/assets/img/favicon.png') }}">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.2.1/css/bootstrap.min.css">
+
+    <!-- Fontawesome CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='admin/assets/css/font-awesome.min.css') }}">
+
+    <!-- Feathericon CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='admin/assets/css/feathericon.min.css') }}">
+
+    <!-- Datatables CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='admin/assets/plugins/datatables/datatables.min.css') }}">
+
+    <!-- Main CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='admin/assets/css/style.css') }}">
+
+    <!--[if lt IE 9]>
+    <script src="{{ url_for('static', filename='admin/assets/js/html5shiv.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='admin/assets/js/respond.min.js') }}"></script>
+    <![endif]-->
+</head>
+<body>
+
+<!-- Main Wrapper -->
+<div class="main-wrapper">
+
+    <!-- Header -->
+    <div class="header">
+
+        <!-- Logo -->
+        <div class="header-left">
+
+        </div>
+        <!-- /Logo -->
+
+        <a href="javascript:void(0);" id="toggle_btn">
+            <i class="fe fe-text-align-left"></i>
+        </a>
+
+        <!-- Mobile Menu Toggle -->
+        <a class="mobile_btn" id="mobile_btn">
+            <i class="fa fa-bars"></i>
+        </a>
+        <!-- /Mobile Menu Toggle -->
+
+        <!-- Header Right Menu -->
+
+        <!-- /Header Right Menu -->
+    </div>
+    <!-- /Header -->
+
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-inner slimscroll">
+            <div id="sidebar-menu" class="sidebar-menu">
+                <ul>
+                    <li class="menu-title">
+                        <span><i class="fe fe-home"></i> <a href="/admin_analysis">首页</a></span>
+                    </li>
+                    <li class="active">
+                        <a href="/knowledge_list"><span>水稻虫害资讯列表</span></a>
+                    </li>
+                    <li class="active">
+                        <a href="/admin_category_list"><span>水稻虫害信息表</span></a>
+                    </li>
+                    <li class="active">
+                        <a href="/category_management"><span>水稻虫害类别管理</span></a>
+                    </li>
+                    <li class="active">
+                        <a href="/user_list"><span>用户管理</span></a>
+                    </li>
+                    <li class="active">
+                        <a href="/admin_identification_record_list"><span>识别记录管理</span></a>
+                    </li>
+                    <li class="active">
+                        <a href="/prevention_list"><span>预警信息管理</span></a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    {% block content %}
+    {% endblock %}
+
+</div>
+
+<!-- jQuery -->
+<script src="{{ url_for('static', filename='admin/assets/js/jquery-3.2.1.min.js') }}"></script>
+
+<!-- Bootstrap Core JS -->
+<script src="{{ url_for('static', filename='admin/assets/js/popper.min.js') }}"></script>
+<script src="{{ url_for('static', filename='admin/assets/js/bootstrap.min.js') }}"></script>
+
+<!-- Slimscroll JS -->
+<script src="{{ url_for('static', filename='admin/assets/plugins/slimscroll/jquery.slimscroll.min.js') }}"></script>
+
+<!-- Datatables JS -->
+<script src="{{ url_for('static', filename='admin/assets/plugins/datatables/jquery.dataTables.min.js') }}"></script>
+<script src="{{ url_for('static', filename='admin/assets/plugins/datatables/datatables.min.js') }}"></script>
+
+<!-- Custom JS -->
+<script src="{{ url_for('static', filename='admin/assets/js/script.js') }}"></script>
+
+</body>
+</html>

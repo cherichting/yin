@@ -1,0 +1,294 @@
+{% extends 'admin/admin_base.html' %}
+{% block content %}
+    <!-- FAVICON -->
+    <link rel="shortcut icon" href="static/admin/assets1/js/favicon.png">
+    <!-- STYLESHEETS -->
+   <!-- 引入 ECharts -->
+<script src="https://unpkg.com/echarts/dist/echarts.min.js"></script>
+
+
+    <body>
+    <!-- Begin page -->
+    <div style="margin-top: 100px;">
+
+        <div>
+            <div class="cb-page-content">
+                <div class="container">
+                    <div class="row">
+                        <div class="cb-col-20 col-sm-6">
+                            <div class="widget-panel widget-style-1 bg-primary">
+                                <h2 class="m-0 text-white counter font-40 font-400 text-center">{{ user_num }}</h2>
+                                <div class="text-white text-opt  m-t-5 text-center font-12">用户数量</div>
+                                <div class="sparkline1"></div>
+                            </div>
+                        </div>
+                        <div class="cb-col-20 col-sm-6">
+                            <div class="widget-panel widget-style-1 bg-success">
+                                <h2 class="m-0 text-white counter font-40 font-400 text-center">{{ drug_num }}</h2>
+                                <div class="text-white text-opt m-t-5 text-center font-12">水稻病虫害数量</div>
+                                <div class="sparkline1"></div>
+                            </div>
+                        </div>
+                        <div class="cb-col-20 col-sm-6">
+                            <div class="widget-panel widget-style-1 bg-info">
+                                <h2 class="m-0 text-white counter font-40 font-400 text-center">{{ category_num }}</h2>
+                                <div class="text-white text-opt m-t-5 text-center font-12">种类数量</div>
+                                <div class="sparkline1"></div>
+                            </div>
+                        </div>
+                        <div class="cb-col-20 col-sm-6">
+                            <div class="widget-panel widget-style-1 bg-purple">
+                                <h2 class="m-0 text-white counter font-40 font-400 text-center">{{ knowledge_num }}</h2>
+                                <div class="text-white text-opt m-t-5 text-center font-12">知识科普</div>
+                                <div class="sparkline1"></div>
+                            </div>
+                        </div>
+                        <div class="cb-col-20 col-sm-6">
+                            <div class="widget-panel widget-style-1 bg-warning">
+                                <h2 class="m-0 text-white counter font-40 font-400 text-center">{{ recognition_num }}</h2>
+                                <div class="text-white text-opt m-t-5 text-center font-12">识别次数
+                                </div>
+                                <div class="sparkline1"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <div class="card-box">
+                                        <div class="card-box-head">
+
+                                        </div>
+                                        <div class="card-box-content">
+                                            <div class="row">
+                                                <div class="col-md-8 col-sm-7">
+                                                    <div id="echart1" class="bar-280"
+                                                         style="width: 400px;height: 700px;"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="card-box">
+                                        <div id="echart2" style="width: 600px;height: 700px;"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- end row -->
+                        </div>
+                    </div>
+                    <!-- end row -->
+                    <div class="row">
+                        <div class="col-lg-8">
+                            <div class="row">
+
+                            </div>
+                        </div>
+                    </div>
+                    <!-- end row -->
+                    <!--responsive tabel -->
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="card-box" style="width: 1140px;height: 300px;">
+                                <div id="echart3" style="width: 1140px;height: 500px;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- container -->
+        </div>
+
+        <!-- END wrapper -->
+
+
+        <script>
+            var chartDom = document.getElementById('echart1');
+            var myChart = echarts.init(chartDom);
+            var option;
+
+            option = {
+                title: {
+                    text: '每种水稻虫害的识别次数',
+                    left: 'center',
+                    top: 20,
+                    textStyle: {
+                        color: '#333',
+                        fontSize: 18
+                    }
+                },
+                tooltip: {
+                    trigger: 'item'
+                },
+                legend: {
+                    orient: 'horizontal',
+                    top: '10%', // 调整图例距离顶部的位置
+                    left: 'center'
+                },
+                series: [
+                    {
+                        name: '水稻虫害',
+                        type: 'pie',
+                        radius: ['60%', '80%'],
+                        avoidLabelOverlap: false,
+                        label: {
+                            show: false,
+                            position: 'center'
+                        },
+                        emphasis: {
+                            label: {
+                                show: true,
+                                fontSize: 20,
+                                fontWeight: 'bold'
+                            }
+                        },
+                        labelLine: {
+                            show: false
+                        },
+                        data: {{ pie_data|tojson }}
+                    }
+                ]
+            };
+
+            option && myChart.setOption(option);
+        </script>
+        <script>
+            var chartDom = document.getElementById('echart2');
+            var myChart = echarts.init(chartDom);
+            var option;
+
+            option = {
+                title: {
+                    text: '每个用户识别次数',
+                    left: 'center',
+                    top: 20,
+                    textStyle: {
+                        color: '#333',
+                        fontSize: 18
+                    }
+                },
+                tooltip: {
+                    trigger: 'item', // 设置触发类型为数据项
+                    formatter: '{a} <br/>{b}: {c} ({d}%)' // 设置提示框内容格式
+                },
+                color: ['#FFAE57', '#FF7853', '#EA5151', '#CC3F57', '#9A2555', '#7D3EB7'],  // 自定义颜色
+                legend: {
+                    top: 'bottom'
+                },
+                toolbox: {
+                    show: true,
+                    feature: {
+                        mark: {show: true},
+                        dataView: {show: true, readOnly: false},
+                        restore: {show: true},
+                        saveAsImage: {show: true}
+                    }
+                },
+                series: [
+                    {
+                        name: 'Nightingale Chart',
+                        type: 'pie',
+                        radius: [50, 250],
+                        center: ['50%', '50%'],
+                        roseType: 'area',
+                        itemStyle: {
+                            borderRadius: 8
+                        },
+                        data: {{ user_count_data|tojson }},
+                        animationType: 'scale',  // 添加动画效果
+                        animationEasing: 'elasticOut',  // 设置动画的缓动效果
+                        animationDelay: function (idx) {
+                            return Math.random() * 200;  // 设置不同的延迟时间，使动画更丰富
+                        }
+                    }
+                ]
+            };
+
+            option && myChart.setOption(option);
+        </script>
+        <script>
+            var chartDom = document.getElementById('echart3');
+            var myChart = echarts.init(chartDom);
+            var option;
+
+            option = {
+                title: {
+                    text: '每日识别数量趋势',
+                    left: 'center',
+                    top: 20,
+                    textStyle: {
+                        color: '#333',
+                        fontSize: 18
+                    }
+                },
+                xAxis: {
+                    type: 'category',
+                    data: {{ dates | tojson }},
+                    axisLabel: {
+                        rotate: 45, // 旋转 x 轴标签，使其更易阅读
+                        textStyle: {
+                            color: '#333' // 设置标签颜色
+                        }
+                    }
+                },
+                yAxis: {
+                    type: 'value',
+                    axisLabel: {
+                        textStyle: {
+                            color: '#333' // 设置标签颜色
+                        }
+                    },
+                    splitLine: {
+                        show: false // 隐藏网格线
+                    }
+                },
+                series: [
+                    {
+                        data: {{ counts }},
+                        type: 'line',
+                        smooth: true, // 使用平滑曲线
+                        symbol: 'circle', // 设置数据点的形状
+                        symbolSize: 8, // 设置数据点的大小
+                        lineStyle: {
+                            color: '#61a0a8' // 设置折线颜色
+                        },
+                        itemStyle: {
+                            color: '#61a0a8' // 设置数据点的颜色
+                        }
+                    }
+                ],
+                grid: {
+                    containLabel: true, // 确保标签不会超出图表
+                    left: 20,
+                    right: 20,
+                    top: 40,
+                    bottom: 40
+                },
+                tooltip: {
+                    trigger: 'axis',
+                    axisPointer: {
+                        type: 'line'
+                    }
+                }
+            };
+
+            option && myChart.setOption(option);
+
+        </script>
+        <!-- SmartBox Js files -->
+        <script>
+            var resizefunc = [];
+        </script>
+
+        <script src="static/admin/assets1/js/jquery.min.js"></script>
+        {#<script src="static/admin/assets1/js/bootstrap.min.js"></script>#}
+        <script src="static/admin/assets1/plugins/morris/morris.min.js"></script>
+        <script src="static/admin/assets1/plugins/raphael/raphael-min.js"></script>
+
+        <script src="static/admin/assets1/js/cb-chart.js"></script>
+
+    </body>
+
+{% endblock %}

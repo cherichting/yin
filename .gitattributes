@@ -1,0 +1,15 @@
+# 自动处理文本文件
+* text=auto
+
+# 强制某些文件使用LF
+*.py text eol=lf
+*.sh text eol=lf
+*.html text eol=lf
+*.css text eol=lf
+*.js text eol=lf
+
+# 二进制文件（不处理）
+*.png binary
+*.jpg binary
+*.gif binary
+*.pdf binary

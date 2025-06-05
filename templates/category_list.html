@@ -1,0 +1,117 @@
+{% extends 'top_base.html' %}
+{% block content %}
+
+    <style>
+        .entirety {
+            width: 100%;
+            height: auto;
+            display: flex;
+        }
+
+        .top_box {
+            width: 70%;
+            height: auto;
+            background-color: #FFF2F2;
+            margin-top: 100px;
+            margin-left: 250px;
+            display: flex;
+            flex-wrap: wrap;
+            border-radius: 20px;
+            overflow: hidden;
+        }
+
+        .category_box {
+            width: 370px;
+            height: 370px;
+            margin-top: 20px;
+            margin-left: 20px;
+
+            border-radius: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .category_img {
+            width: 300px;
+            height: 280px;
+            margin-top: 20px;
+            border-radius: 20px;
+        }
+
+        .title {
+            font-size: 24px;
+            text-align: center;
+
+            margin-bottom: 20px;
+        }
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 20px;
+        }
+
+        .pagination a,
+        .pagination .current-page {
+            display: inline-block;
+            padding: 5px 10px;
+            margin: 0 5px;
+            text-decoration: none;
+            color: #333;
+            border: 1px solid #333;
+            border-radius: 3px;
+        }
+
+        .pagination a:hover {
+            background-color: #333;
+            color: #fff;
+        }
+
+        .pagination .current-page {
+            background-color: #333;
+            color: #fff;
+        }
+
+
+    </style>
+    <div class="entirety">
+        <div class="top_box">
+            {% for re in category_list %}
+                <a href="/category_detail?id={{ re[0] }}">
+                    <div class="category_box">
+                        <div class="title">
+                            <h1>{{ re[1] }}</h1>
+                        </div>
+                        <div>
+                            <img src="{{ re[2] }}" alt="" class="category_img">
+                        </div>
+                    </div>
+                </a>
+            {% endfor %}
+        </div>
+    </div>
+    <!-- 分页按钮 -->
+    <div class="pagination">
+        {% if page != 1 %}
+            <a href="/category_list?page={{ page-1 }}">上一页</a>
+        {% endif %}
+
+        {% for i in range(1, total_pages+1) %}
+            {% if i == page %}
+                <span class="current-page">{{ i }}</span>
+            {% else %}
+                <a href="/category_list?page={{ i }}">{{ i }}</a>
+            {% endif %}
+        {% endfor %}
+
+        {% if page != total_pages %}
+            <a href="/category_list?page={{ page+1 }}">下一页</a>
+        {% endif %}
+    </div>
+
+
+
+{% endblock %}

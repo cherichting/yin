@@ -1,0 +1,96 @@
+{% extends 'top_base.html' %}
+
+{% block content %}
+    <style>
+        .centered-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            height: 700px;
+        }
+
+        .custom-file-input {
+            appearance: none;
+            background-color: #f4f4f4;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            padding: 8px;
+            color: #333;
+            font-size: 16px;
+            outline: none;
+        }
+
+        .custom-file-input::file-selector-button {
+            padding: 8px 16px;
+            background-color: #ccc;
+            color: #fff;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+    </style>
+    <div class="centered-container">
+        <div>
+            <h1>图片上传和识别</h1>
+            <input type="file" id="upload-button" class="custom-file-input">
+            <button id="submit-button" class="submit-button">提交</button>
+            <h2>识别结果：</h2>
+            <h1 id="result"></h1>
+            <div id="image-container"></div> <!-- 添加一个具有 id="image-container" 的 div 元素 -->
+        </div>
+        <img id="identify_result" src="" alt="">
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            document.getElementById('submit-button').addEventListener('click', function () {
+                var fileInput = document.getElementById('upload-button');
+                var file = fileInput.files[0];
+                var formData = new FormData();
+                formData.append('file', file);
+                console.log(formData)
+
+                var xhr = new XMLHttpRequest();
+                xhr.open('POST', '/image_recognition', true);
+                xhr.onload = function () {
+                    if (xhr.status === 200) {
+                        var response = JSON.parse(xhr.responseText);
+                        console.log('111111111111111111111111', response)
+                        document.getElementById('result').innerText = response.result;
+                        document.getElementById('identify_result').setAttribute('src', response.identify_result[0][1]); // 设置 img 元素的 src 属性为返回的图片链接
+                        if (response.identify_result[0][1]) {
+                            var identifyResultImg = document.getElementById('identify_result');
+                            identifyResultImg.setAttribute('src', response.identify_result[0][1]);
+                            identifyResultImg.style.width = '300px'; // 设置图片宽度
+                            identifyResultImg.style.height = '300px'; // 设置图片高度
+                            identifyResultImg.style.display = 'block'; // 显示图片
+
+                            // 创建并配置 a 标签
+                            // 创建并配置 a 标签
+                            var identifyResultLink = document.createElement('a');
+                            identifyResultLink.href = '/category_detail?id=' + response.identify_result[0][0]; // 设置链接的 URL，假设返回结果中有一个名为identify_result_id的属性
+
+// 将 img 元素添加到 a 标签中
+                            identifyResultLink.appendChild(identifyResultImg);
+
+// 将包含图片和链接的 a 标签添加到页面中
+                            var container = document.getElementById('image-container');
+                            if (container) {
+                                container.appendChild(identifyResultLink);
+                            } else {
+                                console.error("无法找到id为 'image-container' 的元素");
+                            }
+                        } else {
+                            // 其他处理逻辑
+                        }
+
+                    } else {
+                        document.getElementById('result').innerText = "识别失败";
+
+                    }
+                };
+
+                xhr.send(formData);
+            });
+        });
+    </script>
+{% endblock %}

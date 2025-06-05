@@ -1,0 +1,296 @@
+{% extends 'admin/admin_base.html' %}
+{% block content %}
+    <!-- /Sidebar -->
+    <style>
+        .datatable td {
+            max-width: 200px; /* 设置最大宽度为200px，根据需要调整 */
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        }
+
+    </style>
+    <!-- Page Wrapper -->
+    <div class="page-wrapper">
+        <div class="content container-fluid">
+
+            <!-- Page Header -->
+            <div class="page-header">
+                <div class="row">
+
+                </div>
+            </div>
+            <!-- /Page Header -->
+
+            <div class="row">
+                <div class="col-sm-12">
+                    <a class="btn btn-sm bg-success-light btn-add" data-toggle="modal" href="#add_modal" data-id="">
+                        <i class="fe fe-plus"></i> 新增
+                    </a>
+                    <div class="card">
+
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="datatable table table-hover table-center mb-0">
+                                    <thead>
+                                    <tr>
+                                        <th>id</th>
+                                        <th>用户名</th>
+                                        <th> 密码</th>
+
+
+                                        <th>操作</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody style="width: 1400px;">
+                                    {% for row in user_list %}
+                                        <tr>
+                                            <td>{{ row[0] }}</td>
+                                            <td>{{ row[1] }}</td>
+                                            <td>{{ row[2] }}</td>
+                                            <td class="text-right">
+                                                <div class="actions">
+                                                    <a class="btn btn-sm bg-success-light btn-edit" data-toggle="modal"
+                                                       href="#edit_modal" data-id="{{ row[0] }}">
+                                                        <i class="fe fe-pencil"></i> 编辑
+                                                    </a>
+                                                    <a data-toggle="modal" class="btn btn-sm bg-danger-light btn-delete"
+                                                       onclick="confirmDelete('{{ row[0] }}')">
+                                                        <i class="fe fe-trash"></i> 删除
+                                                    </a>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <!-- /Page Wrapper -->
+
+
+    <!-- 新增 -->
+    <div class="modal fade" id="add_modal" aria-hidden="true" role="dialog">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div class="form-content p-2">
+                        <div class="modal-header border-0">
+                            <h4 class="modal-title">新增信息</h4>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                        </div>
+                        <div class="card">
+                            <div class="card-body">
+                                <!-- 新增弹窗 -->
+                                <form id="add_form" method="post" autocomplete="off" enctype="multipart/form-data"
+                                      novalidate="novalidate" class="bv-form">
+                                    <!-- 表单内容 -->
+                                    <button type="submit" class="bv-hidden-submit"
+                                            style="display: none; width: 0px; height: 0px;"></button>
+                                    <input type="hidden" name="csrf_token_name"
+                                           value="104dbdaf79d7d8e21e4ae9991d166669">
+                                    <div class="form-group">
+                                        <label>用户名</label>
+                                        <input class="form-control" type="text" name="username">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>密码</label>
+                                        <input class="form-control" type="text" name="password">
+                                    </div>
+                                    <div class="mt-4">
+                                        <button class="btn btn-primary" name="add_submit" value="submit" type="submit">
+                                            保存
+                                        </button>
+                                        <button type="button" class="btn btn-danger" data-dismiss="modal">取消</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <!-- 编辑 Modal -->
+    <div class="modal fade" id="edit_modal" aria-hidden="true" role="dialog">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div class="form-content p-2">
+                        <div class="modal-header border-0">
+                            <h4 class="modal-title">编辑</h4>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                        </div>
+                        <div class="card">
+                            <div class="card-body">
+                                <!-- 编辑弹窗 -->
+                                <form id="edit_form" method="post" autocomplete="off" enctype="multipart/form-data"
+                                      novalidate="novalidate" class="bv-form">
+                                    <button type="submit" class="bv-hidden-submit"
+                                            style="display: none; width: 0px; height: 0px;"></button>
+                                    <input type="hidden" name="csrf_token_name"
+                                           value="104dbdaf79d7d8e21e4ae9991d166669">
+                                    <div class="form-group">
+                                        <label>id</label>
+                                        <input class="form-control" type="text" name="id"
+                                               id="category_name" readonly>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>用户名</label>
+                                        <input class="form-control" type="text" name="username"
+                                               id="category_name">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>密码</label>
+                                        <input class="form-control" type="text" name="password"
+                                               id="category_name">
+                                    </div>
+                                    <div class="mt-4">
+                                        <button class="btn btn-primary" name="form_submit" value="submit" type="submit">
+                                            保存
+                                        </button>
+                                        <button type="button" class="btn btn-danger" data-dismiss="modal">取消</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /Edit Modal -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <script>
+        $(document).on('click', '.btn-edit', function () {
+            var id = $(this).data('id');
+            $('#edit_form input[name="category_id"]').val(id);
+
+            // 使用AJAX获取与id相关的数据并填充到相应字段中
+            $.ajax({
+                url: '/category_update?id=' + id,
+                method: 'GET',
+                success: function (response) {
+                    $('#edit_form input[name="id"]').val(response.id);
+                    $('#edit_form input[name="username"]').val(response.username);
+                    $('#edit_form input[name="password"]').val(response.password);
+                },
+                error: function () {
+                    alert('获取数据失败');
+                }
+            });
+        });
+    </script>
+    <script>
+        $(document).on('click', '.btn-primary[name="form_submit"]', function (event) {
+            event.preventDefault(); // 阻止表单提交的默认行为
+
+            var form = $('#edit_form');
+            var formData = new FormData(form[0]); // 创建一个FormData对象来包含表单数据
+
+            // 发送POST请求保存表单数据
+            $.ajax({
+                url: '/user_update',
+                method: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (response) {
+                    // 根据保存成功的响应执行相应操作
+                    alert('数据保存成功');
+                    $('#edit_modal').modal('hide');
+                    location.reload();
+                },
+                error: function () {
+                    alert('数据保存失败');
+                }
+            });
+        });
+    </script>
+    <script>
+        $(document).ready(function () {
+            // 监听表单提交事件
+            $('#add_form').submit(function (event) {
+                event.preventDefault(); // 阻止表单默认提交行为
+                // 获取表单数据
+                // 获取表单数据
+                var username = $('input[name="username"]').val();
+                var password = $('input[name="password"]').val();
+
+
+
+                // 检查输入是否为空
+                if (username === '' || password === '') {
+                    alert('输入不能为空');
+                    return;
+                }
+
+                // 创建 FormData 对象，将表单数据包装成键值对的形式
+                var formData = new FormData(this);
+
+                $.ajax({
+                    url: '/user_add',
+                    type: 'POST',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function (response) {
+                        // 请求成功
+                        alert('添加成功');
+                        console.log(response);
+                        $('#add_modal').modal('hide');
+                        location.reload();
+                        // 在这里处理请求成功后的操作
+                    },
+                    error: function () {
+                        // 请求失败
+                        console.log('请求失败');
+                    }
+                });
+            });
+        });
+    </script>
+    <!-- Delete Model -->
+    <script>
+        function confirmDelete(id) {
+            if (confirm("确定要删除吗？")) {
+                // 发起 AJAX 请求
+                deleteItem(id);
+            }
+        }
+
+        function deleteItem(id) {
+            // 使用 AJAX 发起请求到后台
+            // 这里使用的是 jQuery 的 AJAX 方法，你也可以使用其他的方式发送 AJAX 请求
+            $.ajax({
+                url: '/user_del',
+                type: 'POST',
+                data: {id: id},
+                success: function (response) {
+                    // 处理删除成功的情况
+                    // 例如刷新页面或更新 UI
+                    alert('删除成功')
+                    location.reload();
+                },
+                error: function () {
+                    // 处理删除失败的情况
+                    // 可以显示错误信息给用户
+                }
+            });
+        }
+    </script>
+{% endblock %}
+

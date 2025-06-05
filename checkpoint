@@ -1,0 +1,2 @@
+model_checkpoint_path: "ricew.ckpt"
+all_model_checkpoint_paths: "ricew.ckpt"

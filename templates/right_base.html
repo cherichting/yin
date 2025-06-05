@@ -1,0 +1,40 @@
+<div class="ui segments">
+    <div class="ui secondary segment">
+        <div class="ui two column grid">
+            <div class="column">
+                <i class="idea icon"></i>分类
+            </div>
+        </div>
+    </div>
+    <div class="ui teal segment" id="dynamic-content">
+        <div class="ui fluid vertical menu">
+            <a class="item">
+
+            </a>
+        </div>
+    </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $.ajax({
+            url: '/right_base',
+            method: 'GET',
+            success: function (response) {
+                // 清空现有菜单项
+                $('#dynamic-content .ui.vertical.menu').empty();
+
+                // 循环遍历数据并动态生成菜单项
+                $.each(response, function (index, item) {
+                    var id = item[0];
+                    var title = item[1];
+                    var html = '<a href="/detail?id=' + id + '" class="item">' + title + '</a>';
+                    $('#dynamic-content .ui.vertical.menu').append(html);
+                });
+            },
+            error: function (xhr, status, error) {
+                // 在错误处理中执行适当的操作
+            }
+        });
+    });
+</script>

@@ -1,0 +1,203 @@
+{% extends 'top_base.html' %}
+{% block content %}
+
+    <style>
+        .entirety {
+            width: 100%;
+            height: auto;
+            display: flex;
+        }
+
+        .top_box {
+            width: 70%;
+            height: auto;
+            background-color: #FFF2F2;
+            margin-top: 200px;
+            margin-left: 250px;
+            display: flex;
+            flex-wrap: wrap;
+            border-radius: 20px;
+            overflow: hidden;
+        }
+
+        .category_box {
+            width: 370px;
+            height: 370px;
+            margin-top: 20px;
+            margin-left: 20px;
+
+            border-radius: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .category_img {
+            width: 300px;
+            height: 280px;
+            margin-top: 20px;
+            border-radius: 20px;
+        }
+
+        .title {
+            font-size: 24px;
+            text-align: center;
+
+            margin-bottom: 20px;
+        }
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 20px;
+        }
+
+        .pagination a,
+        .pagination .current-page {
+            display: inline-block;
+            padding: 5px 10px;
+            margin: 0 5px;
+            text-decoration: none;
+            color: #333;
+            border: 1px solid #333;
+            border-radius: 3px;
+        }
+
+        .pagination a:hover {
+            background-color: #333;
+            color: #fff;
+        }
+
+        .pagination .current-page {
+            background-color: #333;
+            color: #fff;
+        }
+
+        .top_choose {
+            width: 400px;
+            height: 150px;
+
+        }
+
+        .top_choose {
+            position: absolute;
+            top: 0;
+            left: 0;
+            margin-left: 250px;
+            margin-top: 100px;
+        }
+
+        .top_choose select {
+            width: 200px;
+            padding: 10px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            background-color: #f1f1f1;
+            outline: none;
+            cursor: pointer;
+        }
+
+        .top_choose select:hover {
+            background-color: #e8e8e8;
+        }
+
+        .top_choose select option {
+            padding: 10px;
+        }
+
+        .top_choose {
+            display: flex;
+            align-items: center;
+        }
+
+        .top_choose a {
+            display: inline-block;
+            padding: 8px 16px;
+            margin-right: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            text-decoration: none;
+            color: #333;
+            transition: background-color 0.3s;
+        }
+
+        .top_choose a:hover {
+            background-color: #f5f5f5;
+        }
+    </style>
+    <div class="entirety">
+        <div class="top_choose">
+            <h3>分类筛选</h3>
+            <a href="/sort?">全部</a>
+            {% for re in all_category %}
+
+                <a href="/sort?selectedValue={{ re[0] }}">{{ re[1] }}</a>
+
+            {% endfor %}
+        </div>
+        <div class="top_box">
+            {% for re in category_list %}
+                <a href="/category_detail?id={{ re[0] }}">
+                    <div class="category_box">
+                        <div class="title">
+                            <h1>{{ re[1] }}</h1>
+                        </div>
+                        <div>
+                            <img src="{{ re[2] }}" alt="" class="category_img">
+                        </div>
+                    </div>
+                </a>
+            {% endfor %}
+        </div>
+    </div>
+    <!-- 分页按钮 -->
+    <div class="pagination">
+        {% if page != 1 %}
+            <a href="/sort?page={{ page-1 }}&selectedValue={{ selectedValue }}">上一页</a>
+        {% endif %}
+
+        {% for i in range(1, total_pages+1) %}
+            {% if i == page %}
+                <span class="current-page">{{ i }}</span>
+            {% else %}
+                <a href="/sort?page={{ i }}&selectedValue={{ selectedValue }}">{{ i }}</a>
+            {% endif %}
+        {% endfor %}
+
+        {% if page != total_pages %}
+            <a href="/sort?page={{ page+1 }}&selectedValue={{ selectedValue }}">下一页</a>
+        {% endif %}
+    </div>
+
+    {#    <script>#}
+    {#        document.getElementById('dropdown').addEventListener('change', function (event) {#}
+    {#            event.preventDefault(); // 阻止默认的表单提交行为#}
+    {##}
+    {#            var selectedValue = this.value; // 获取被选择的值#}
+    {#            var url = '/sort'; // 请求的 URL#}
+    {#            var xhr = new XMLHttpRequest();#}
+    {#            xhr.open('POST', url);#}
+    {#            xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded'); // 设置请求头#}
+    {##}
+    {#            // 将选择的值作为表单数据发送#}
+    {#            var formData = new FormData();#}
+    {#            formData.append('selectedValue', selectedValue);#}
+    {#            formData.append('page', 1);#}
+    {##}
+    {#            xhr.onload = function () {#}
+    {#                if (xhr.status === 200) {#}
+    {#                    // 根据响应进行相应处理#}
+    {#                    console.log(xhr.responseText);#}
+    {#                } else {#}
+    {#                    // 处理错误情况#}
+    {#                    console.log('请求发生错误');#}
+    {#                }#}
+    {#            };#}
+    {#            xhr.send(formData);#}
+    {#        });#}
+    {#    </script>#}
+
+{% endblock %}
